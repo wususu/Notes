@@ -1,5 +1,5 @@
 
-<scrtpt src="https://unpkg.com/mermaid@<version>/dist/"></script>
+<script src="https://unpkg.com/mermaid@<version>/dist/"></script>
 
 # Java内存模型与线程
 
