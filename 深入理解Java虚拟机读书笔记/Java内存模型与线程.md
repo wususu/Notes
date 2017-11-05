@@ -1,3 +1,6 @@
+
+<scrtpt src="https://unpkg.com/mermaid@<version>/dist/"></script>
+
 # Java内存模型与线程
 
 基础(硬件效率的一致性):
