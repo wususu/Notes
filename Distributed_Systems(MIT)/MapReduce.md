@@ -2,7 +2,7 @@
 
 ### 介绍:
 
-MapReduce是一种编程模型,也是一个处理和生成大量数据的实现
+MapReduce是一种编程模型,也是一种处理和生成大量数据的实现
 
 用户定义一个`map`函数用来处理键值对并生成中间键值对,定义一个`reduce`函数将相同中间键的中间值合并起来.
 
@@ -92,3 +92,10 @@ MapReduce使得大集群运算变得流行
 - 它不是最有效或灵活的。
 + 扩展性好
 + 易于编程实现 -- 故障和数据移动是隐藏的
+
+
+
+
+> 参考资料:<br>
+> https://pdos.csail.mit.edu/6.824/notes/l01.txt<br>
+> https://pdos.csail.mit.edu/6.824/papers/mapreduce.pdf

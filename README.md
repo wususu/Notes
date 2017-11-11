@@ -6,13 +6,22 @@
 
 ## 书籍相关
 
-- 深入理解Java虚拟机
-    1. [Java内存区域划分与对象新建过程](./深入理解Java虚拟机读书笔记/Java内存区域划分.md)
-    2. [jvm垃圾收集机制与内存分配策略](./深入理解Java虚拟机读书笔记/jvm垃圾收集与内存回收策略.md)
-    3. [jvm类加载机制](./深入理解Java虚拟机读书笔记/jvm类加载机制.md)
-    4. [Java的内存模型](./深入理解Java虚拟机读书笔记/Java内存模型.md)
+### 深入理解Java虚拟机
+
++ [Java内存区域划分与对象新建过程](./深入理解Java虚拟机读书笔记/Java内存区域划分.md)
++ [jvm垃圾收集机制与内存分配策略](./深入理解Java虚拟机读书笔记/jvm垃圾收集与内存回收策略.md)
++ [jvm类加载机制](./深入理解Java虚拟机读书笔记/jvm类加载机制.md)
++ [Java的内存模型](./深入理解Java虚拟机读书笔记/Java内存模型.md)
+
+### Think In Java
+
++ [Java容器](./ThinkInJava/Java容器.md)
++ [Java并发](./ThinkInJava/Java并发.md) 
+
+
 
 
 ## 其他
 
-- [双重检查锁定漏洞分析](双重检查锁定漏洞分析笔记.md)
++ [MapReduce](./Distributed_Systems(MIT)/MapReduce.md)
++ [双重检查锁定漏洞分析](双重检查锁定漏洞分析笔记.md)
