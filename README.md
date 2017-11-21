@@ -2,7 +2,11 @@
 
 > 知识不总结,就会被大脑当垃圾清理:rocket:
 
-这里主要是一些:book:读书学习的笔记,主要用于个人:pencil:学习记录.如内容有不妥之处,欢迎讨论!
+:book:学习笔记:pencil:总结
+
+学习的道路必定不会平坦，唯有以勤为刃，以习惯为履，方能劈荆斩棘，不断开拓，知常人所不知，晓常人所不晓。
+
+擅于思考的人,就算散步也是修行
 
 ## 书籍相关
 
@@ -14,14 +18,15 @@
 + [Java的内存模型](./深入理解Java虚拟机/Java内存模型.md)
 
 
-
 ### Think In Java
 
 + [Java容器](./ThinkInJava/Java容器.md)
 + [Java并发](./ThinkInJava/Java并发.md) 
 
+### Java Concurrency in Practice
 
-
++ [对象的共享](./Java_Concurrency_in_Practice/对象的共享.md)
++ [对象的组合](./Java_Concurrency_in_Practice/对象的组合.md) 
 
 ## 其他
 
