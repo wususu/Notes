@@ -21,12 +21,13 @@
 ### Think In Java
 
 + [Java容器](./ThinkInJava/Java容器.md)
-+ [Java并发](./ThinkInJava/Java并发.md) 
++ [Java并发](./ThinkInJava/Java并发.md)
 
 ### Java Concurrency in Practice
 
 + [对象的共享](./Java_Concurrency_in_Practice/对象的共享.md)
 + [对象的组合](./Java_Concurrency_in_Practice/对象的组合.md) 
++ [基础构建模块](./Java_Concurrency_in_Practice/基础构件模块.md)
 
 ## 其他
 
