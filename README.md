@@ -8,6 +8,22 @@
 
 擅于思考的人,就算散步也是修行
 
+## Java基础
+
+### JavaGC监控与优化
+
+1. [垃圾回收机制](http://www.importnew.com/1993.html)
+2. [垃圾回收机制的监控](http://www.importnew.com/2057.html)
+3. [优化垃圾回收机制](http://www.importnew.com/3146.html)
+4. [Apache的MaxClients参数详解及其在Tomcat执行FullGC时的影响](http://www.importnew.com/3151.html)
+
+### 其他
+
++ [MapReduce](./Distributed_Systems(MIT)/MapReduce.md)
++ [双重检查锁定漏洞分析](双重检查锁定漏洞分析笔记.md)
+
+---
+
 ## 书籍相关
 
 ### 深入理解Java虚拟机
@@ -28,8 +44,3 @@
 + [对象的共享](./Java_Concurrency_in_Practice/对象的共享.md)
 + [对象的组合](./Java_Concurrency_in_Practice/对象的组合.md) 
 + [基础构建模块](./Java_Concurrency_in_Practice/基础构件模块.md)
-
-## 其他
-
-+ [MapReduce](./Distributed_Systems(MIT)/MapReduce.md)
-+ [双重检查锁定漏洞分析](双重检查锁定漏洞分析笔记.md)
