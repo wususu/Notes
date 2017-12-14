@@ -21,6 +21,7 @@
 
 + [MapReduce](./Distributed_Systems(MIT)/MapReduce.md)
 + [双重检查锁定漏洞分析](双重检查锁定漏洞分析笔记.md)
++ [ThreadPoolExecutor源码解析（jdk8版）](ThreadPoolExecutor源码解析（jdk8版）.md)
 
 ---
 
@@ -32,7 +33,7 @@
 + [jvm垃圾收集机制与内存分配策略](./深入理解Java虚拟机/jvm垃圾收集与内存回收策略.md)
 + [jvm类加载机制](./深入理解Java虚拟机/jvm类加载机制.md)
 + [Java的内存模型](./深入理解Java虚拟机/Java内存模型.md)
-
++ [锁优化](./深入理解Java虚拟机/锁优化.md)
 
 ### Think In Java
 
