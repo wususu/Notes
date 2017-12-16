@@ -72,7 +72,9 @@
 + corePoolSize: 核心线程数量
 + maximumPoolSize: 最高线程数量, 但是最高不超过CAPACITY的值
 
-## 入口方法execute()
+以上的基本类型实例域都可以算是线程池对象的记账本，记录当前线程池的“身体状态”
+
+## 入口方法execute(Runnable command)
 
         /**
         * Executes the given task sometime in the future.  The task
@@ -129,17 +131,16 @@
         }
 
 
-    1. 当前运行的worker小于`corePoolSize`时,直接实例化一个新的worker运行此任务,否则进入第二步
-    2. 如果阻塞队列未满则进入阻塞队列排队等待worker执行,否则进入第三步
-    3. 如果当前worker数小于`maximumPoolSize`时,尝试实例化一个新的worker来执行此任务,否则进入第四步
-    4. 当worker数大于`maximumPoolSize`或线程池正处于关闭过程时,拒绝这个接收这个任务,由rejectHandler处理.
+1. 当前运行的worker小于`corePoolSize`时,直接实例化一个新的worker运行此任务,否则进入第二步
+2. 如果阻塞队列未满则进入阻塞队列排队等待worker执行,否则进入第三步
+3. 如果当前worker数小于`maximumPoolSize`时,尝试实例化一个新的worker来执行此任务,否则进入第四步
+4. 当worker数大于`maximumPoolSize`或线程池正处于关闭过程时,拒绝这个接收这个任务,由rejectHandler处理.
 
-    + addWorker方法将会原子地检查`runState`和`workerCount`,防止多线程状态下中错误的添加worker
-    + 第二部使用了双重检查,防止进入条件语句后线程池关闭
++ addWorker方法将会原子地检查`runState`和`workerCount`,防止多线程状态下中错误的添加worker
++ 第二部使用了双重检查,防止进入条件语句后线程池关闭
 
 
-## 新建线程:addWorker()
-
+## 新建线程:addWorker(Runnable firstTask, boolean core)
         /*
         * Methods for creating, running and cleaning up after workers
         */
@@ -350,7 +351,7 @@ firstTask将作为这个worker的第一个运行任务
 Worker还扩展了`AbstractQueuedSynchronizer`(一个用于构建锁和同步器的框架)且实现了父类的模板方法,实现任务执行前后的加锁与解锁
 
 
-## 线程执行的方法runWorker()
+## 线程执行的方法runWorker(Worker w)
 
         /**
         * Main worker run loop.  Repeatedly gets tasks from queue and
@@ -439,4 +440,130 @@ Worker还扩展了`AbstractQueuedSynchronizer`(一个用于构建锁和同步器
             }
         }
 
-!!! 未完待续
++ runWork（）代表每个工作者线程的执行，当成功完成初始的任务后，只要线程池还是运行状态，就通过`getTask（）`从任务等待队列中拿任务来执行，直到`getTask（）`方法返回null（这个后面会详细说明）， 会跳出循环，之后`processWorkerExit（）`将为他“处理后事”，这个worker的生命周期就到此结束
+
++ 每个任务运行前后都会执行（beforeExecute）前置动作和（afterExecute）后置动作，不过实现留空了，应该是供子类扩展用的
+
+
+## 获取任务getTask()
+
+
+            /**
+            * Performs blocking or timed wait for a task, depending on
+            * current configuration settings, or returns null if this worker
+            * must exit because of any of:
+            * 1. There are more than maximumPoolSize workers (due to
+            *    a call to setMaximumPoolSize).
+            * 2. The pool is stopped.
+            * 3. The pool is shutdown and the queue is empty.
+            * 4. This worker timed out waiting for a task, and timed-out
+            *    workers are subject to termination (that is,
+            *    {@code allowCoreThreadTimeOut || workerCount > corePoolSize})
+            *    both before and after the timed wait, and if the queue is
+            *    non-empty, this worker is not the last thread in the pool.
+            *
+            * @return task, or null if the worker must exit, in which case
+            *         workerCount is decremented
+            */
+            private Runnable getTask() {
+                boolean timedOut = false; // Did the last poll() time out?
+
+                for (;;) {
+                    int c = ctl.get();
+                    int rs = runStateOf(c);
+
+                    // Check if queue empty only if necessary.
+                    if (rs >= SHUTDOWN && (rs >= STOP || workQueue.isEmpty())) {
+                        decrementWorkerCount();
+                        return null;
+                    }
+
+                    int wc = workerCountOf(c);
+
+                    // Are workers subject to culling?
+                    boolean timed = allowCoreThreadTimeOut || wc > corePoolSize;
+
+                    if ((wc > maximumPoolSize || (timed && timedOut))
+                        && (wc > 1 || workQueue.isEmpty())) {
+                        if (compareAndDecrementWorkerCount(c))
+                            return null;
+                        continue;
+                    }
+
+                    try {
+                        Runnable r = timed ?
+                            workQueue.poll(keepAliveTime, TimeUnit.NANOSECONDS) :
+                            workQueue.take();
+                        if (r != null)
+                            return r;
+                        timedOut = true;
+                    } catch (InterruptedException retry) {
+                        timedOut = false;
+                    }
+                }
+            }
+
++ 这个方法会根据配置提供阻塞or限时从任务队列中提取任务的操作
+
++ 返回null的几种情况（注释已经很明确了）：
+1. 当前worker数超过`maximumPoolSize`限定值
+2. 线程池是STOP状态（stop不执行队列的任务）
+3. 线程池塘是SHUTDOWN状态且任务队列是空的（shutdown会等待队列任务执行完毕）
+4. worker等待一个任务超过时间限制
+
+
+## Worker的“后事处理”：processWorkerExit(Worker w, boolean completedAbruptly)
+
+
+    /**
+     * Performs cleanup and bookkeeping for a dying worker. Called
+     * only from worker threads. Unless completedAbruptly is set,
+     * assumes that workerCount has already been adjusted to account
+     * for exit.  This method removes thread from worker set, and
+     * possibly terminates the pool or replaces the worker if either
+     * it exited due to user task exception or if fewer than
+     * corePoolSize workers are running or queue is non-empty but
+     * there are no workers.
+     *
+     * @param w the worker
+     * @param completedAbruptly if the worker died due to user exception
+     */
+    private void processWorkerExit(Worker w, boolean completedAbruptly) {
+        if (completedAbruptly) // If abrupt, then workerCount wasn't adjusted
+            decrementWorkerCount();
+
+        final ReentrantLock mainLock = this.mainLock;
+        mainLock.lock();
+        try {
+            completedTaskCount += w.completedTasks;
+            workers.remove(w);
+        } finally {
+            mainLock.unlock();
+        }
+
+        tryTerminate();
+
+        int c = ctl.get();
+        if (runStateLessThan(c, STOP)) {
+            if (!completedAbruptly) {
+                int min = allowCoreThreadTimeOut ? 0 : corePoolSize;
+                if (min == 0 && ! workQueue.isEmpty())
+                    min = 1;
+                if (workerCountOf(c) >= min)
+                    return; // replacement not needed
+            }
+            addWorker(null, false);
+        }
+    }
+
++ completedAbruptly：用于判断worker是因为`getTask()`返回null退出还是执行发生异常退出，前者不做任何处理（`getTask`已经做了），后者将调整下workerCount
+
++ 之后将登记这个worker的工作成果再将它“辞退”，这个worker对象的生命周期结束
+
++ 最后再判断，如果线程池还在运行状态且因为运行异常退出，就再增加一个增加一个新的worker（可以理解为workerA不能完成boss的需求，boss就把他辞退，然后聘请一个新的workerB）<br/>
+如果线程池在运行状态且是因为`getTask（）`返回null退出，就要根据是否设置了`allowCoreThreadTimeOut`（运行核心线程在空闲超时被回收）来判断是否要增加新的worker（这就好像工厂没有单做，就要辞退工人好减少亏损，如果厂长可以选择2种策略：1是全炒了，有新单再招新的工人；2是留下一部分工人以便有新单的时候能马上开工）
+
++ `tryTerminate()`这个方法是在每个`worker`生命周期结束后都检查线程池运行状态，在SHUTDOWN并且任务为空，或者STOP并且任务队列为空的情况下将线程池转为TERMINATED状态，线程池生命周期结束
+
+
+> 以上内容都是个人理解，如有不严谨或错漏之处，欢迎指正！
