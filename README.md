@@ -15,7 +15,8 @@
 + [MapReduce](./Distributed_Systems(MIT)/MapReduce.md)
 + [双重检查锁定漏洞分析](双重检查锁定漏洞分析笔记.md)
 + [ThreadPoolExecutor源码解析（jdk8版）](ThreadPoolExecutor源码解析（jdk8版）.md)
-
++ [HashMap源码解析(jdk8版)【完善中】](/home/janke/Notes/HashMap源码解析(jdk8).md)
++ [设计模式六大原则](设计模式六大原则.md)
 
 ### 深入理解Java虚拟机
 
