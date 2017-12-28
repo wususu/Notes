@@ -376,4 +376,6 @@ HashMap跟HashTable两个类是差不多的,除了HashTable是线程安全且不
 > 以上分析为个人理解,欢迎指正!
 
 
-关于红黑树的实现与操作并没有深入代码层次解析，有兴趣可阅读［］（https://tech.meituan.com/redblack-tree.html）
+> 关于红黑树的实现与操作并没有深入代码层次解析，有兴趣可阅读
+[红黑树深入析及Java实现
+](https://tech.meituan.com/redblack-tree.html)
