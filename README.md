@@ -1,6 +1,6 @@
 # Notes 我的笔记:
 
-> 知识不总结,就会被大脑当垃圾清理:rocket:
+octocat> 知识不总结,就会被大脑当垃圾清理:octocat:
 
 :book:学习笔记:pencil:总结
 
@@ -17,7 +17,7 @@
 + [双重检查锁定漏洞分析](双重检查锁定漏洞分析笔记.md)
 + [ThreadPoolExecutor源码解析（jdk8版）](ThreadPoolExecutor源码解析（jdk8版）.md)
 + [HashMap源码解析(jdk8版)](HashMap源码解析(jdk8).md)
-+ [设计模式六大原则](设计模式六大原则.md)
++ [面向对象设计六大原则](面向对象设计六大原则.md)
 
 ### 深入理解Java虚拟机
 
@@ -40,11 +40,18 @@
 
 ### JavaGC监控与优化
 
-1. [垃圾回收机制](http://www.importnew.com/1993.html)
-2. [垃圾回收机制的监控](http://www.importnew.com/2057.html)
-3. [优化垃圾回收机制](http://www.importnew.com/3146.html)
-4. [Apache的MaxClients参数详解及其在Tomcat执行FullGC时的影响](http://www.importnew.com/3151.html)
-
++ [垃圾回收机制](http://www.importnew.com/1993.html)
++ [垃圾回收机制的监控](http://www.importnew.com/2057.html)
++ [优化垃圾回收机制](http://www.importnew.com/3146.html)
++ [Apache的MaxClients参数详解及其在Tomcat执行FullGC时的影响](http://www.importnew.com/3151.html)
 
 ## JavaEE
+
 + [浅析Web容器](./JavaEE/浅析Web容器.md)
+
+## 设计模式
+
++ [模板方法](./设计模式/模板方法.md)
++ [策略模式](./设计模式/策略模式.md)
++ [建造者模式](./设计模式/建造者模式.md)
++ [单例模式](./设计模式/单例模式.md)
