@@ -35,4 +35,4 @@ Stream中的所有的tuple都会发送给同一个bolt任务处理，所有的tu
 只有被声明为Direct Stream的消息流可以声明这种分组方法。而且这种消息tuple必须使用emitDirect方法来发射。
 消息处理者可以通过TopologyContext来获取处理它的消息的taskid (OutputCollector.emit方法也会返回taskid)。
 
-	![](pic/2018-3-2.1.jpg)
+![](pic/2018-3-2.1.jpg)
