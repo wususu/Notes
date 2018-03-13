@@ -21,7 +21,11 @@
 
 + 线程池中实现了内部类Worker,实现了Runnable,扩展了AbstractQueuedSynchronizer(一个同步框架),其实例域封装了一个线程, 可以认为一个worker实例是一个工作者线程, 负责执行提交到线程池的任务.
 
-+ ctl: 用于表示线程池状态和当前worker数量的包装属性(可以理解为记账本)，其二进制前三位用于表示`runState`（线程池运行状态），后29位表示当任务数.CAPACITY: 000111111~1; `~CAPACITY`: 111000000~0(用于解包装)<br/>
++ ctl: 用于表示线程池状态和当前worker数量的包装属性(可以理解为记账本)，其二进制前三位用于表示`runState`（线程池运行状态），后29位表示当任务数.   
+
+        CAPACITY: 000111111~1; 
+        ~CAPACITY: 111000000~0(用于解包装)
+
 `runStateOf(int c)`通过传入ctl获取当前运行状态<br/>
 `workerCountOf(int c)`通过传入ctl获取当前worker数<br/>
 `ctlOf(int rs, int wc)`通过传入运行状态和worker数算出ctl
