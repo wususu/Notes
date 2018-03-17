@@ -246,3 +246,85 @@ tryRelease通过state的大小判断当前解锁的线程是不是最后一个�
 
 
 ## Condition原理
+
+一个Condition有一个等待队列,一个AQS有一个同步队列,所以一个基于AQS的锁可以有多个等待队列
+
+newCondition()方法实例化且返回AQS的ConditionObject
+
+        // ReentrantLock
+        final ConditionObject newCondition() {
+            return new ConditionObject();
+        }
+
+ConditionObject的await()方法, 挂起当前线程:
+
+        // ConditionObject
+        public final void await() throws InterruptedException {
+            if (Thread.interrupted())
+                throw new InterruptedException();
+            // 将当前线程包装加入这个Condition的等待队列
+            Node node = addConditionWaiter();
+            // 释放当前线程对锁的持有,唤醒后继线程
+            int savedState = fullyRelease(node);
+            int interruptMode = 0;
+            // 当前线程是否在同步队列中,否说明线程是活跃状态,需要挂起
+            while (!isOnSyncQueue(node)) {
+                LockSupport.park(this);
+                if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)
+                    break;
+            }
+            // 被唤醒后尝试获取锁
+            if (acquireQueued(node, savedState) && interruptMode != THROW_IE)
+                interruptMode = REINTERRUPT;
+            // 清理等待队列中不为CONDITION状态(即CANCELLED)的结点
+            if (node.nextWaiter != null) // clean up if cancelled
+                unlinkCancelledWaiters();
+            if (interruptMode != 0)
+                reportInterruptAfterWait(interruptMode);
+        }
+
+ConditionObject的signal()方法, 唤醒一个线程:
+
+        // 取出等待队列中第一个线程唤醒
+        public final void signal() {
+            if (!isHeldExclusively())
+                throw new IllegalMonitorStateException();
+            Node first = firstWaiter;
+            if (first != null)
+                doSignal(first);
+        }
+
+        // 将要唤醒的线程结点的后继设为null,即将其移出等待队列
+        // transferForSignal(node)进行cas唤醒,若失败,则说明被其他线程唤醒了,重新取下一个线程进行唤醒
+        // 若取到最后一个线程结点,就把尾结点指向设为null
+        private void doSignal(Node first) {
+            do {
+                if ( (firstWaiter = first.nextWaiter) == null)
+                    lastWaiter = null;
+                first.nextWaiter = null;
+            } while (!transferForSignal(first) &&
+                     (first = firstWaiter) != null);
+        }
+
+        // 唤醒一个线程 
+        final boolean transferForSignal(Node node) {
+            /*
+            * If cannot change waitStatus, the node has been cancelled.
+            */
+            if (!compareAndSetWaitStatus(node, Node.CONDITION, 0))
+                return false;
+
+            /*
+            * Splice onto queue and try to set waitStatus of predecessor to
+            * indicate that thread is (probably) waiting. If cancelled or
+            * attempt to set waitStatus fails, wake up to resync (in which
+            * case the waitStatus can be transiently and harmlessly wrong).
+            */
+            // 将唤醒的结点加入同步队列末端,并放回其前继结点
+            Node p = enq(node);
+            int ws = p.waitStatus;
+            // 若前继结点无法设为SIGNAL状态时,唤醒线程
+            if (ws > 0 || !compareAndSetWaitStatus(p, ws, Node.SIGNAL))
+                LockSupport.unpark(node.thread);
+            return true;
+        }
