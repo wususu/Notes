@@ -17,7 +17,13 @@
 + [双重检查锁定漏洞分析](双重检查锁定漏洞分析笔记.md)
 + [ThreadPoolExecutor源码解析（jdk8版）](ThreadPoolExecutor源码解析（jdk8版）.md)
 + [HashMap源码解析(jdk8版)](HashMap源码解析(jdk8).md)
++ [ReentrantLock源码解析(jdk8版)](ReentrantLock源码解析(jdk8).md)
 + [面向对象设计六大原则](面向对象设计六大原则.md)
+
+### Redis
+
++ [Redis持久化与复制](./Redis设计原理/Redis持久化与复制.md)
++ [Redis集群模式](./Redis设计原理/Redis集群.md)
 
 ### 深入理解Java虚拟机
 
