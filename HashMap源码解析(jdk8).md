@@ -21,7 +21,7 @@ HashMap跟HashTable两个类是差不多的,除了HashTable是线程安全且不
         static final int MIN_TREEIFY_CAPACITY = 64;
 
 + DEFAULT_INITIAL_CAPACITY: 默认底层数组的初始大小(2^4),可通过构造参数指定
-+ MAXIMUM_CAPACITY: 数组的最大长度(2^30),超过将替换为此值
++ MAXIMUM_CAPACITY: 数组的最大长度(2^31),超过将替换为此值
 + DEFAULT_LOAD_FACTOR: 默认负载因子,为0.75,可通过构造参数指定
 + TREEIFY_THRESHOLD: 链表转换为红黑树的阙值,当链表长度达到8自动转为红黑树进行存储(前提是数组长度大于等于64)
 + UNTREEIFY_THRESHOLD: 红黑树转为链表的阙值,当红黑树结点个数减小到6时,自动转为链表存储
