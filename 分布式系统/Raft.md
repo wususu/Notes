@@ -34,7 +34,7 @@ Raft能够正确地处理网络分区（“脑裂”）问题
 
 + A~E五个结点，B是leader。如果发生“脑裂”，A、B成为一个子分区，C、D、E成为一个子分区。此时C、D、E会发生选举，选出C作为新term的leader。这样我们在两个子分区内就有了不同term的两个leader。这时如果有客户端写A时，因为B无法复制日志到大部分follower所以日志处于uncommitted未提交状态。而同时另一个客户端对C的写操作却能够正确完成，因为C是新的leader，它只知道D和E。
 
-+ 当网络分区消除时,A,B能与所有节点发送心跳包，此时发现彼此term不一致，于是会以term最大的为Leader，另一个及其Follower会rollback在分区时uncommited的值成为其Follower。  （如果term比较小的那部分分区有超过总数一半的节点，已经commit，如何保持更新一致呢？）
++ 当网络分区消除时,A,B能与所有节点发送心跳包，此时发现彼此term不一致，于是会以term最大的为Leader，另一个及其Follower会rollback在分区时uncommited的值成为其Follower。  （如果term比较小的那部分分区有超过总数一半的节点，已经commit，如何保持更新一致呢？ 突然想到了答案： 如果trem比较小，不可能拥有超过总数一半的节点，因为节点过少无法提交）
 
 
 ## Raft特性：
