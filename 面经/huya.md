@@ -16,7 +16,7 @@
 
 5. 手写冒泡排序
 
-6. 一个大文件存放一系列url和该url的访问次数{key：‘www.github.com’, value:2}，内存不能容纳全部数据，求出访问量最大的10个url
+6. 一个大文件存放一系列url和该url的访问次数(同一url会多次出现){key：‘www.github.com’, value:2}，内存不能容纳全部数据，累加求和求出访问量最大的10个url
 
 7. tomcat架构
 
